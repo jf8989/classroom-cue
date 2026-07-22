@@ -1,17 +1,17 @@
 const status = document.querySelector('#status');
 const buttons = [...document.querySelectorAll('[data-sound]')];
 const clips = {
-  applause: 'assets/sounds/applause.mp3',
-  cheer: 'assets/sounds/cheer.mp3',
-  fanfare: 'assets/sounds/fanfare.mp3',
-  trombone: 'assets/sounds/sad-trombone.mp3',
-  boing: 'assets/sounds/boing.mp3',
-  rimshot: 'assets/sounds/rimshot.mp3',
-  quack: 'assets/sounds/duck-quack.mp3',
-  bell: 'assets/sounds/school-bell.mp3',
-  whoosh: 'assets/sounds/whoosh.mp3',
-  drumroll: 'assets/sounds/drumroll.mp3',
-  mystery: 'assets/sounds/mystery-rise.mp3'
+  applause: 'assets/sounds/applause.wav',
+  cheer: 'assets/sounds/cheer.wav',
+  fanfare: 'assets/sounds/fanfare.wav',
+  trombone: 'assets/sounds/sad-trombone.wav',
+  boing: 'assets/sounds/boing.wav',
+  rimshot: 'assets/sounds/rimshot.wav',
+  quack: 'assets/sounds/duck-quack.wav',
+  bell: 'assets/sounds/school-bell.wav',
+  whoosh: 'assets/sounds/whoosh.wav',
+  drumroll: 'assets/sounds/drumroll.wav',
+  mystery: 'assets/sounds/mystery-rise.wav'
 };
 
 function setStatus(message, kind = '') {

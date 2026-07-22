@@ -18,7 +18,7 @@ Classroom Cue is a small, privacy-friendly Chrome extension that puts a polished
 - Quack
 - Mystery rise
 
-All cues use real, bundled CC0 recordings that play directly in the active tab. When you share that same tab in Google Meet with **Share tab audio** enabled, your students hear the cues. The extension has no trackers or network requests. See [sound credits](CREDITS.md) for the complete source and license record.
+All cues use real, bundled CC0 recordings that play directly in the active tab. They are normalized to **−14 dBFS C-weighted RMS**, with a −2 dBFS sample-peak ceiling. When you share that same tab in Google Meet with **Share tab audio** enabled, your students hear the cues. The extension has no trackers or network requests. See [sound credits](CREDITS.md) for the complete source and license record.
 
 ## Install locally
 
