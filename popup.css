@@ -1,0 +1,24 @@
+:root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17233e; background: #f6f8ff; }
+* { box-sizing: border-box; }
+body { width: 374px; margin: 0; }
+main { padding: 18px; }
+.hero { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
+.logo { width: 46px; height: 46px; border-radius: 14px; box-shadow: 0 5px 15px rgba(35, 80, 180, .18); }
+.eyebrow { margin: 0 0 2px; font-size: 9px; line-height: 1; font-weight: 800; letter-spacing: .1em; color: #5770a6; }
+h1 { margin: 0; font-size: 20px; line-height: 1.1; letter-spacing: -.04em; }
+.status { min-height: 31px; margin: 0 0 17px; padding: 8px 10px; border-radius: 9px; background: #eaf0ff; color: #36558e; font-size: 11px; font-weight: 650; }
+.status.ready { background: #e7f8ef; color: #14613f; }
+.status.error { background: #fff0ee; color: #aa3c35; }
+section { margin: 0 0 16px; }
+h2 { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: .03em; color: #4a5c7d; }
+.sound-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sound-card { min-height: 104px; padding: 10px 7px 8px; border: 1px solid rgba(26, 48, 89, .06); border-radius: 14px; color: #17233e; text-align: left; cursor: pointer; transition: transform .13s ease, box-shadow .13s ease, filter .13s ease; }
+.sound-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(32, 53, 95, .13); filter: saturate(1.12); }
+.sound-card:active, .sound-card.playing { transform: translateY(1px) scale(.98); box-shadow: inset 0 2px 5px rgba(25, 44, 81, .12); }
+.sound-card:focus-visible { outline: 3px solid #315df6; outline-offset: 2px; }
+.sound-card span { display: block; margin-bottom: 8px; font-size: 25px; line-height: 1; }
+.sound-card b { display: block; font-size: 11px; line-height: 1.1; }
+.sound-card small { display: block; margin-top: 4px; color: #62708c; font-size: 9px; line-height: 1.1; }
+.blue { background: #e9f0ff; }.gold { background: #fff4d7; }.pink { background: #ffeaf2; }.purple { background: #f0eaff; }.mint { background: #e4faf2; }.orange { background: #fff0e4; }.teal { background: #e2f8f8; }.sky { background: #e7f5ff; }.red { background: #ffebe8; }
+footer { display: flex; align-items: center; gap: 6px; padding-top: 3px; color: #66738d; font-size: 10px; line-height: 1.3; }
+footer strong { color: #385177; }.live-dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: #28b678; box-shadow: 0 0 0 3px #dff7ec; }

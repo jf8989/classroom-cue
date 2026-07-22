@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Classroom Cue</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <img class="logo" src="icons/icon-128.png" alt="" />
+        <div>
+          <p class="eyebrow">GOOGLE MEET SOUNDBOARD</p>
+          <h1>Classroom Cue</h1>
+        </div>
+      </header>
+
+      <p id="status" class="status" role="status">Checking your active tab…</p>
+
+      <section aria-labelledby="celebrate-label">
+        <h2 id="celebrate-label">Celebrate</h2>
+        <div class="sound-grid">
+          <button class="sound-card blue" data-sound="applause"><span aria-hidden="true">👏</span><b>Applause</b><small>Big win</small></button>
+          <button class="sound-card gold" data-sound="cheer"><span aria-hidden="true">🎉</span><b>Cheer</b><small>Let’s go!</small></button>
+          <button class="sound-card pink" data-sound="fanfare"><span aria-hidden="true">🏆</span><b>Fanfare</b><small>Ta-da!</small></button>
+        </div>
+      </section>
+
+      <section aria-labelledby="funny-label">
+        <h2 id="funny-label">Funny moments</h2>
+        <div class="sound-grid">
+          <button class="sound-card purple" data-sound="trombone"><span aria-hidden="true">📯</span><b>Wah-wah</b><small>Bad joke</small></button>
+          <button class="sound-card mint" data-sound="boing"><span aria-hidden="true">🪀</span><b>Boing</b><small>Plot twist</small></button>
+          <button class="sound-card orange" data-sound="rimshot"><span aria-hidden="true">🥁</span><b>Rimshot</b><small>Ba-dum tss</small></button>
+        </div>
+      </section>
+
+      <section aria-labelledby="class-label">
+        <h2 id="class-label">Keep class moving</h2>
+        <div class="sound-grid">
+          <button class="sound-card teal" data-sound="bell"><span aria-hidden="true">🔔</span><b>Class bell</b><small>Heads up</small></button>
+          <button class="sound-card sky" data-sound="whoosh"><span aria-hidden="true">💨</span><b>Whoosh</b><small>Next slide</small></button>
+          <button class="sound-card red" data-sound="drumroll"><span aria-hidden="true">🥁</span><b>Drumroll</b><small>Reveal</small></button>
+        </div>
+      </section>
+
+      <footer>
+        <span class="live-dot" aria-hidden="true"></span>
+        Cues mix with your <strong>Meet microphone</strong>.
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
