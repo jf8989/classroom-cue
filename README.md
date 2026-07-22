@@ -65,7 +65,7 @@ meet-soundboard/
 ├── popup.html      # Soundboard interface
 ├── popup.css       # UI styling
 └── popup.js        # Popup-to-active-tab injection
-└── tab-audio.js    # Synthesizes a cue in the active tab
+└── tab-audio.js    # Plays a bundled cue in the active tab
 ```
 
 ## License
