@@ -39,6 +39,11 @@ volumeSlider.addEventListener('input', () => {
 async function playInActiveTab(sound, volume) {
   const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!activeTab?.id) throw new Error('No active tab');
+  if (!/^https?:\/\//.test(activeTab.url || '')) {
+    const error = new Error('Cue playback requires a regular website tab.');
+    error.code = 'UNSUPPORTED_TAB';
+    throw error;
+  }
 
   await chrome.scripting.executeScript({
     target: { tabId: activeTab.id },
@@ -65,8 +70,12 @@ buttons.forEach((button) => {
       await playInActiveTab(sound, volume);
       setStatus(volume ? `Playing ${button.querySelector('b').textContent} in this tab.` : 'Volume is muted.', 'ready');
     } catch (error) {
-      console.error(error);
-      setStatus('Chrome cannot add sound to this page. Use a normal website tab.', 'error');
+      if (error.code === 'UNSUPPORTED_TAB') {
+        setStatus('Switch to the tab you are sharing. Chrome internal pages cannot play cues.', 'error');
+      } else {
+        console.error(error);
+        setStatus('Chrome cannot add sound to this page. Use a normal website tab.', 'error');
+      }
     }
   });
 });
