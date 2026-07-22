@@ -13,19 +13,5 @@
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://meet.google.com/*"],
-      "js": ["main-world.js"],
-      "run_at": "document_start",
-      "world": "MAIN"
-    },
-    {
-      "matches": ["https://meet.google.com/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
-  "permissions": ["tabs"],
-  "host_permissions": ["https://meet.google.com/*"]
+  "permissions": ["activeTab", "scripting"]
 }

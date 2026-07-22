@@ -1,6 +1,6 @@
 # Classroom Cue
 
-Classroom Cue is a small, privacy-friendly Chrome extension that puts a polished soundboard in your Google Meet classroom. Make a win feel like a win, punctuate a joke, or gently bring the room back together—without switching tabs or uploading audio files.
+Classroom Cue is a small, privacy-friendly Chrome extension that puts a polished soundboard in whichever Chrome tab you are sharing in Google Meet. Make a win feel like a win, punctuate a joke, or gently bring the room back together—without switching tabs or uploading audio files.
 
 ![Classroom Cue icon](icons/icon-128.png)
 
@@ -16,7 +16,7 @@ Classroom Cue is a small, privacy-friendly Chrome extension that puts a polished
 - Whoosh
 - Drumroll
 
-All cues are synthesized directly in the Google Meet page and mixed with the microphone stream that Meet sends to the call. The extension has no bundled audio assets, trackers, or network requests.
+All cues are synthesized directly in the active tab. When you share that same tab in Google Meet with **Share tab audio** enabled, your students hear the cues. The extension has no bundled audio assets, trackers, or network requests.
 
 ## Install locally
 
@@ -25,30 +25,22 @@ All cues are synthesized directly in the Google Meet page and mixed with the mic
 3. Turn on **Developer mode**.
 4. Choose **Load unpacked** and select this project folder.
 5. Pin **Classroom Cue** from Chrome’s Extensions menu.
-6. Refresh any Google Meet tab that was already open, then join your call.
 
 ## Use it in Google Meet
 
 1. Join a meeting at [meet.google.com](https://meet.google.com/).
-2. Present any tab, window, or screen as usual—tab sharing is not required for the cues.
-3. Click the Classroom Cue toolbar icon and select a sound.
+2. Select **Present now** → **A tab**, choose the tab you intend to use, and turn on **Share tab audio**.
+3. Keep that shared tab active. Click the Classroom Cue toolbar icon and select a sound.
 
-The sounds are mixed into the microphone feed Meet sends to participants, so your students hear them even while you present a different tab or your screen. If Chrome ever blocks an initial sound after opening Meet, refresh the Meet tab and try the cue again.
+The cue plays through the active tab's normal audio output. Chrome adds it to the tab audio you are already sharing with Meet. You can use Classroom Cue on regular websites such as slides, Miro, videos, and browser-based activities. Chrome blocks extensions from injecting sound into internal pages such as `chrome://`.
 
 ## Troubleshooting
 
-The popup reports **“microphone mix is active”** once Meet has requested your microphone after the extension loaded. If it asks you to refresh and rejoin:
-
-1. Open `chrome://extensions` and click the reload icon for Classroom Cue after changing the extension files.
-2. Refresh the Google Meet tab.
-3. Leave and rejoin the call (or turn your microphone off and on) so Meet requests the microphone again.
-4. Open Classroom Cue—the status should confirm that the microphone mix is active before you play a cue.
-
-Teachers also hear a local preview of each cue. Use headphones if this would otherwise create feedback through your physical microphone.
+If you update the local extension files, open `chrome://extensions` and click the reload icon for Classroom Cue before testing again. Then return to the tab you are sharing, open the popup, and play a cue. You should hear it locally and anyone receiving the tab’s shared audio should hear it too.
 
 ## Privacy
 
-Classroom Cue runs only on `meet.google.com`. It does not collect data, make network requests, use analytics, or store recordings. The `tabs` permission is used only to check whether your active tab is a Google Meet tab before enabling the soundboard.
+Classroom Cue does not collect data, make network requests, use analytics, or store recordings. Its `activeTab` permission lets it add a cue only to the tab you explicitly activate the soundboard from; it has no standing access to your browsing activity.
 
 ## Development
 
@@ -56,13 +48,12 @@ This is a dependency-free Manifest V3 extension:
 
 ```text
 meet-soundboard/
-├── content.js      # Extension-world popup-to-page bridge
 ├── icons/          # Extension icons
-├── main-world.js   # Mixes microphone and synthesized classroom cues
 ├── manifest.json   # Chrome extension manifest
 ├── popup.html      # Soundboard interface
 ├── popup.css       # UI styling
-└── popup.js        # Popup-to-Meet messaging
+└── popup.js        # Popup-to-active-tab injection
+└── tab-audio.js    # Synthesizes a cue in the active tab
 ```
 
 ## License
