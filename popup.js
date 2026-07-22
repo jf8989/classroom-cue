@@ -15,7 +15,12 @@ async function getMeetTab() {
     return;
   }
   meetTab = activeTab;
-  setStatus('Ready to cue your class.', 'ready');
+  const cueStatus = await chrome.tabs.sendMessage(meetTab.id, { type: 'GET_CUE_STATUS' });
+  if (cueStatus?.micMixActive) {
+    setStatus('Ready — your microphone mix is active.', 'ready');
+  } else {
+    setStatus('Refresh Meet and rejoin once to activate the microphone mix.', 'error');
+  }
 }
 
 buttons.forEach((button) => {
@@ -25,8 +30,12 @@ buttons.forEach((button) => {
     button.classList.add('playing');
     setTimeout(() => button.classList.remove('playing'), 220);
     try {
-      await chrome.tabs.sendMessage(meetTab.id, { type: 'PLAY_CUE', sound });
-      setStatus(`Playing ${button.querySelector('b').textContent} for your class.`, 'ready');
+      const cueResult = await chrome.tabs.sendMessage(meetTab.id, { type: 'PLAY_CUE', sound });
+      if (cueResult?.micMixActive) {
+        setStatus(`Playing ${button.querySelector('b').textContent} for your class.`, 'ready');
+      } else {
+        setStatus('Preview requested — refresh Meet and rejoin to send cues to students.', 'error');
+      }
     } catch {
       setStatus('Refresh the Google Meet tab, then try again.', 'error');
     }

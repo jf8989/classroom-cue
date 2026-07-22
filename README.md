@@ -35,6 +35,17 @@ All cues are synthesized directly in the Google Meet page and mixed with the mic
 
 The sounds are mixed into the microphone feed Meet sends to participants, so your students hear them even while you present a different tab or your screen. If Chrome ever blocks an initial sound after opening Meet, refresh the Meet tab and try the cue again.
 
+## Troubleshooting
+
+The popup reports **“microphone mix is active”** once Meet has requested your microphone after the extension loaded. If it asks you to refresh and rejoin:
+
+1. Open `chrome://extensions` and click the reload icon for Classroom Cue after changing the extension files.
+2. Refresh the Google Meet tab.
+3. Leave and rejoin the call (or turn your microphone off and on) so Meet requests the microphone again.
+4. Open Classroom Cue—the status should confirm that the microphone mix is active before you play a cue.
+
+Teachers also hear a local preview of each cue. Use headphones if this would otherwise create feedback through your physical microphone.
+
 ## Privacy
 
 Classroom Cue runs only on `meet.google.com`. It does not collect data, make network requests, use analytics, or store recordings. The `tabs` permission is used only to check whether your active tab is a Google Meet tab before enabling the soundboard.

@@ -3,11 +3,18 @@
 // every other browser API call are left unchanged.
 let context;
 let mixDestination;
+let cueOutput;
+let micMixActive = false;
 
 function audio() {
   if (!context) {
     context = new AudioContext();
     mixDestination = context.createMediaStreamDestination();
+    cueOutput = context.createGain();
+    cueOutput.gain.value = .8;
+    // Teachers hear a small local preview while the same cue is mixed into Meet.
+    cueOutput.connect(mixDestination);
+    cueOutput.connect(context.destination);
   }
   if (context.state === 'suspended') context.resume().catch(() => {});
   return context;
@@ -20,6 +27,7 @@ function mixMicrophone(stream) {
   const gain = ctx.createGain();
   gain.gain.value = 1;
   source.connect(gain).connect(mixDestination);
+  micMixActive = true;
   const mixedStream = new MediaStream([
     ...stream.getVideoTracks(),
     mixDestination.stream.getAudioTracks()[0]
@@ -45,7 +53,7 @@ function tone(frequency, start, duration, { type = 'sine', gain = 0.18, endFrequ
   envelope.gain.setValueAtTime(.0001, start);
   envelope.gain.exponentialRampToValueAtTime(gain, start + Math.min(.02, duration / 4));
   envelope.gain.exponentialRampToValueAtTime(.0001, start + duration);
-  oscillator.connect(envelope).connect(mixDestination); oscillator.start(start); oscillator.stop(start + duration + .02);
+  oscillator.connect(envelope).connect(cueOutput); oscillator.start(start); oscillator.stop(start + duration + .02);
 }
 
 function noise(start, duration, gain = .12, highpass = 500) {
@@ -55,7 +63,7 @@ function noise(start, duration, gain = .12, highpass = 500) {
   const source = ctx.createBufferSource(); const filter = ctx.createBiquadFilter(); const envelope = ctx.createGain();
   filter.type = 'highpass'; filter.frequency.value = highpass;
   envelope.gain.setValueAtTime(gain, start); envelope.gain.exponentialRampToValueAtTime(.0001, start + duration);
-  source.buffer = buffer; source.connect(filter).connect(envelope).connect(mixDestination);
+  source.buffer = buffer; source.connect(filter).connect(envelope).connect(cueOutput);
   source.start(start); source.stop(start + duration);
 }
 
@@ -74,4 +82,8 @@ const cues = {
 window.addEventListener('classroom-cue-play', (event) => {
   const cue = cues[event.detail?.sound];
   if (cue) cue();
+});
+
+window.addEventListener('classroom-cue-get-status', () => {
+  window.dispatchEvent(new CustomEvent('classroom-cue-status', { detail: { micMixActive } }));
 });
