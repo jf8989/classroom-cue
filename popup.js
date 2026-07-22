@@ -1,5 +1,18 @@
 const status = document.querySelector('#status');
 const buttons = [...document.querySelectorAll('[data-sound]')];
+const clips = {
+  applause: 'assets/sounds/applause.mp3',
+  cheer: 'assets/sounds/cheer.mp3',
+  fanfare: 'assets/sounds/fanfare.mp3',
+  trombone: 'assets/sounds/sad-trombone.mp3',
+  boing: 'assets/sounds/boing.mp3',
+  rimshot: 'assets/sounds/rimshot.mp3',
+  quack: 'assets/sounds/duck-quack.mp3',
+  bell: 'assets/sounds/school-bell.mp3',
+  whoosh: 'assets/sounds/whoosh.mp3',
+  drumroll: 'assets/sounds/drumroll.mp3',
+  mystery: 'assets/sounds/mystery-rise.mp3'
+};
 
 function setStatus(message, kind = '') {
   status.textContent = message;
@@ -20,8 +33,8 @@ async function playInActiveTab(sound) {
   await chrome.scripting.executeScript({
     target: { tabId: activeTab.id },
     world: 'MAIN',
-    args: [sound],
-    func: (cue) => window.__classroomCuePlay(cue)
+    args: [chrome.runtime.getURL(clips[sound])],
+    func: (soundUrl) => window.__classroomCuePlay(soundUrl)
   });
 }
 

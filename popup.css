@@ -19,6 +19,6 @@ h2 { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: .03em; 
 .sound-card span { display: block; margin-bottom: 8px; font-size: 25px; line-height: 1; }
 .sound-card b { display: block; font-size: 11px; line-height: 1.1; }
 .sound-card small { display: block; margin-top: 4px; color: #62708c; font-size: 9px; line-height: 1.1; }
-.blue { background: #e9f0ff; }.gold { background: #fff4d7; }.pink { background: #ffeaf2; }.purple { background: #f0eaff; }.mint { background: #e4faf2; }.orange { background: #fff0e4; }.teal { background: #e2f8f8; }.sky { background: #e7f5ff; }.red { background: #ffebe8; }
+.blue { background: #e9f0ff; }.gold { background: #fff4d7; }.pink { background: #ffeaf2; }.purple { background: #f0eaff; }.mint { background: #e4faf2; }.orange { background: #fff0e4; }.yellow { background: #fff8cf; }.teal { background: #e2f8f8; }.sky { background: #e7f5ff; }.red { background: #ffebe8; }.dark { background: #e8ebf7; }
 footer { display: flex; align-items: center; gap: 6px; padding-top: 3px; color: #66738d; font-size: 10px; line-height: 1.3; }
 footer strong { color: #385177; }.live-dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: #28b678; box-shadow: 0 0 0 3px #dff7ec; }
