@@ -20,5 +20,5 @@ kept here for transparency and to make the source recordings easy to find.
 | Mystery rise | [SusRise](https://freesound.org/people/Bigvegie/sounds/768648/) | Bigvegie |
 
 The longer source recordings were trimmed for classroom-friendly playback, then
-normalized to **−14 dBFS C-weighted RMS**. A −2 dBFS sample-peak ceiling is
-applied to prevent clipping.
+normalized to **−14 dBFS C-weighted RMS**. A four-times-oversampled limiter
+keeps every final file at or below **−1 dB true peak (dBTP)**.

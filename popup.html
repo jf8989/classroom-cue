@@ -18,6 +18,11 @@
 
       <p id="status" class="status" role="status">Click a cue to play it in this tab.</p>
 
+      <div class="volume-control">
+        <label for="volume">Volume <output id="volume-value">100</output></label>
+        <input id="volume" type="range" min="0" max="100" value="100" step="1" aria-label="Cue volume" />
+      </div>
+
       <section aria-labelledby="celebrate-label">
         <h2 id="celebrate-label">Celebrate</h2>
         <div class="sound-grid">

@@ -1,5 +1,7 @@
 const status = document.querySelector('#status');
 const buttons = [...document.querySelectorAll('[data-sound]')];
+const volumeSlider = document.querySelector('#volume');
+const volumeValue = document.querySelector('#volume-value');
 const clips = {
   applause: 'assets/sounds/applause.wav',
   cheer: 'assets/sounds/cheer.wav',
@@ -19,7 +21,22 @@ function setStatus(message, kind = '') {
   status.className = `status ${kind}`;
 }
 
-async function playInActiveTab(sound) {
+function setVolume(value) {
+  const volume = Math.max(0, Math.min(100, Number(value) || 0));
+  volumeSlider.value = volume;
+  volumeValue.value = volume;
+  volumeValue.textContent = volume;
+  return volume / 100;
+}
+
+chrome.storage.local.get({ cueVolume: 100 }).then(({ cueVolume }) => setVolume(cueVolume));
+
+volumeSlider.addEventListener('input', () => {
+  const volume = setVolume(volumeSlider.value) * 100;
+  chrome.storage.local.set({ cueVolume: volume });
+});
+
+async function playInActiveTab(sound, volume) {
   const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!activeTab?.id) throw new Error('No active tab');
 
@@ -33,8 +50,8 @@ async function playInActiveTab(sound) {
   await chrome.scripting.executeScript({
     target: { tabId: activeTab.id },
     world: 'MAIN',
-    args: [chrome.runtime.getURL(clips[sound])],
-    func: (soundUrl) => window.__classroomCuePlay(soundUrl)
+    args: [chrome.runtime.getURL(clips[sound]), volume],
+    func: (soundUrl, cueVolume) => window.__classroomCuePlay(soundUrl, cueVolume)
   });
 }
 
@@ -44,8 +61,9 @@ buttons.forEach((button) => {
     button.classList.add('playing');
     setTimeout(() => button.classList.remove('playing'), 220);
     try {
-      await playInActiveTab(sound);
-      setStatus(`Playing ${button.querySelector('b').textContent} in this tab.`, 'ready');
+      const volume = Number(volumeSlider.value) / 100;
+      await playInActiveTab(sound, volume);
+      setStatus(volume ? `Playing ${button.querySelector('b').textContent} in this tab.` : 'Volume is muted.', 'ready');
     } catch (error) {
       console.error(error);
       setStatus('Chrome cannot add sound to this page. Use a normal website tab.', 'error');
