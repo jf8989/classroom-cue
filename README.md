@@ -4,6 +4,14 @@ Classroom Cue is a small, privacy-friendly Chrome extension that puts a polished
 
 ![Classroom Cue icon](icons/icon-128.png)
 
+## Highlights
+
+- **Eleven real classroom cues**: applause, cheers, a bell, a drumroll, quack, trombone, and more.
+- **Built for Google Meet tab sharing**: a cue becomes audio in the active shared tab, so Meet includes it when **Share tab audio** is on.
+- **Predictable loudness**: every bundled clip is normalized to **-14 dBFS C-weighted RMS** and true-peak limited to **-1 dBTP**.
+- **Compact 0-100 volume control**: your setting is saved locally for the next cue.
+- **Private by design**: no accounts, analytics, uploads, or network requests.
+
 ## Included cues
 
 - Applause
@@ -32,7 +40,7 @@ All cues use real, bundled CC0 recordings that play directly in the active tab. 
 
 1. Join a meeting at [meet.google.com](https://meet.google.com/).
 2. Select **Present now** → **A tab**, choose the tab you intend to use, and turn on **Share tab audio**.
-3. Keep that shared tab active. Click the Classroom Cue toolbar icon and select a sound.
+3. Keep that shared tab active. Click the Classroom Cue toolbar icon, set the compact volume control if needed, and select a sound.
 
 The cue plays through the active tab's normal audio output. Chrome adds it to the tab audio you are already sharing with Meet. You can use Classroom Cue on regular websites such as slides, Miro, videos, and browser-based activities. Chrome blocks extensions from injecting sound into internal pages such as `chrome://`.
 
