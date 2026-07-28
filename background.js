@@ -27,10 +27,20 @@ async function sendQuickBarSettings(tabId, settings) {
   }
 }
 
-chrome.runtime.onMessage.addListener((message, sender) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === 'CLASSROOM_CUE_GET_QUICK_BAR') {
     const tabId = sender.tab?.id ?? message.tabId;
-    return tabId ? getQuickBarSettings(tabId) : Promise.resolve({ quickBarEnabled: false, quickBarSize: 'small' });
+    if (!tabId) {
+      return false;
+    }
+
+    getQuickBarSettings(tabId)
+      .then((settings) => sendResponse(settings))
+      .catch((error) => {
+        console.error('Unable to read quick bar settings.', error);
+        sendResponse({ quickBarEnabled: false, quickBarSize: 'small' });
+      });
+    return true;
   }
 
   if (message?.type === 'CLASSROOM_CUE_SET_QUICK_BAR' && Number.isInteger(message.tabId)) {
@@ -38,9 +48,16 @@ chrome.runtime.onMessage.addListener((message, sender) => {
       quickBarEnabled: message.quickBarEnabled === true,
       quickBarSize: ['small', 'medium', 'large'].includes(message.quickBarSize) ? message.quickBarSize : 'small'
     };
-    return Promise.all([
+    Promise.all([
       chrome.storage.local.set({ quickBarSize: settings.quickBarSize }),
       chrome.storage.session.set({ [tabSettingKey(message.tabId)]: settings.quickBarEnabled })
-    ]).then(() => sendQuickBarSettings(message.tabId, settings));
+    ])
+      .then(() => sendQuickBarSettings(message.tabId, settings))
+      .then(() => sendResponse({ ok: true }))
+      .catch((error) => {
+        console.error('Unable to update the quick bar.', error);
+        sendResponse({ ok: false, error: error.message });
+      });
+    return true;
   }
 });

@@ -39,15 +39,20 @@ async function getActiveWebsiteTab() {
 }
 
 async function loadQuickBarSettings() {
-  const activeTab = await getActiveWebsiteTab();
-  if (!activeTab) return;
+  try {
+    const activeTab = await getActiveWebsiteTab();
+    if (!activeTab) return;
 
-  const settings = await chrome.runtime.sendMessage({
-    type: 'CLASSROOM_CUE_GET_QUICK_BAR',
-    tabId: activeTab.id
-  });
-  quickBarToggle.checked = settings?.quickBarEnabled ?? false;
-  quickBarSize.value = settings?.quickBarSize ?? 'small';
+    const settings = await chrome.runtime.sendMessage({
+      type: 'CLASSROOM_CUE_GET_QUICK_BAR',
+      tabId: activeTab.id
+    });
+    quickBarToggle.checked = settings?.quickBarEnabled ?? false;
+    quickBarSize.value = settings?.quickBarSize ?? 'small';
+  } catch (error) {
+    console.error('Unable to load quick bar settings.', error);
+    setStatus('Reload the extension, then try the quick bar again.', 'error');
+  }
 }
 
 loadQuickBarSettings();
@@ -58,15 +63,21 @@ volumeSlider.addEventListener('input', () => {
 });
 
 async function updateQuickBar() {
-  const activeTab = await getActiveWebsiteTab();
-  if (!activeTab) return;
+  try {
+    const activeTab = await getActiveWebsiteTab();
+    if (!activeTab) return;
 
-  await chrome.runtime.sendMessage({
-    type: 'CLASSROOM_CUE_SET_QUICK_BAR',
-    tabId: activeTab.id,
-    quickBarEnabled: quickBarToggle.checked,
-    quickBarSize: quickBarSize.value
-  });
+    const result = await chrome.runtime.sendMessage({
+      type: 'CLASSROOM_CUE_SET_QUICK_BAR',
+      tabId: activeTab.id,
+      quickBarEnabled: quickBarToggle.checked,
+      quickBarSize: quickBarSize.value
+    });
+    if (!result?.ok) throw new Error(result?.error || 'Quick bar update failed.');
+  } catch (error) {
+    console.error('Unable to update quick bar settings.', error);
+    setStatus('Reload the extension, then try the quick bar again.', 'error');
+  }
 }
 
 quickBarToggle.addEventListener('change', () => {
