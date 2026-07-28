@@ -7,7 +7,7 @@ function tabSettingKey(tabId) {
 async function getQuickBarSettings(tabId) {
   const [{ quickBarSize = 'small' }, tabSettings] = await Promise.all([
     chrome.storage.local.get({ quickBarSize: 'small' }),
-    chrome.storage.session.get(tabSettingKey(tabId))
+    chrome.storage.local.get(tabSettingKey(tabId))
   ]);
 
   return {
@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     };
     Promise.all([
       chrome.storage.local.set({ quickBarSize: settings.quickBarSize }),
-      chrome.storage.session.set({ [tabSettingKey(message.tabId)]: settings.quickBarEnabled })
+      chrome.storage.local.set({ [tabSettingKey(message.tabId)]: settings.quickBarEnabled })
     ])
       .then(() => sendQuickBarSettings(message.tabId, settings))
       .then(() => sendResponse({ ok: true }))
@@ -60,4 +60,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
     return true;
   }
+});
+
+// The enabled state follows a tab through page reloads and extension reloads,
+// but is discarded as soon as that tab closes.
+chrome.tabs.onRemoved.addListener((tabId) => {
+  chrome.storage.local.remove(tabSettingKey(tabId)).catch(() => {});
 });

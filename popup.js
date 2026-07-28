@@ -39,6 +39,8 @@ async function getActiveWebsiteTab() {
 }
 
 async function loadQuickBarSettings() {
+  quickBarToggle.disabled = true;
+  quickBarSize.disabled = true;
   try {
     const activeTab = await getActiveWebsiteTab();
     if (!activeTab) return;
@@ -52,6 +54,9 @@ async function loadQuickBarSettings() {
   } catch (error) {
     console.error('Unable to load quick bar settings.', error);
     setStatus('Reload the extension, then try the quick bar again.', 'error');
+  } finally {
+    quickBarToggle.disabled = false;
+    quickBarSize.disabled = false;
   }
 }
 
