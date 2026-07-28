@@ -10,6 +10,7 @@ Classroom Cue is a small, privacy-friendly Chrome extension that puts a polished
 - **Built for Google Meet tab sharing**: a cue becomes audio in the active shared tab, so Meet includes it when **Share tab audio** is on.
 - **Predictable loudness**: every bundled clip is normalized to **-14 dBFS C-weighted RMS** and true-peak limited to **-1 dBTP**.
 - **Compact 0-100 volume control**: your setting is saved locally for the next cue.
+- **Optional on-screen quick bar**: keep all eleven icon-only cues at the top center of the page, with small, medium, and large button sizes.
 - **Private by design**: no accounts, analytics, uploads, or network requests.
 
 ## Included cues
@@ -40,7 +41,8 @@ All cues use real, bundled CC0 recordings that play directly in the active tab. 
 
 1. Join a meeting at [meet.google.com](https://meet.google.com/).
 2. Select **Present now** → **A tab**, choose the tab you intend to use, and turn on **Share tab audio**.
-3. Keep that shared tab active. Click the Classroom Cue toolbar icon, set the compact volume control if needed, and select a sound.
+3. For one-click cues while working in Miro or another activity, open Classroom Cue and turn on **On-screen quick bar**. Choose Small, Medium, or Large from its size menu. The icon-only bar floats at the top center of the page and does not move the page layout.
+4. You can still use the full popup soundboard at any time. The quick bar uses the same volume setting.
 
 The cue plays through the active tab's normal audio output. Chrome adds it to the tab audio you are already sharing with Meet. You can use Classroom Cue on regular websites such as slides, Miro, videos, and browser-based activities. Chrome blocks extensions from injecting sound into internal pages such as `chrome://`.
 
@@ -50,7 +52,7 @@ If you update the local extension files, open `chrome://extensions` and click th
 
 ## Privacy
 
-Classroom Cue does not collect data, make network requests, use analytics, or store recordings. Its `activeTab` permission lets it add a cue only to the tab you explicitly activate the soundboard from; it has no standing access to your browsing activity.
+Classroom Cue does not collect data, make network requests, use analytics, or store recordings. Its on-screen quick bar runs on regular web pages only so it can restore itself after a page refresh; it reads only its own local display and volume settings and does not collect or transmit page content.
 
 ## Development
 

@@ -2,6 +2,8 @@ const status = document.querySelector('#status');
 const buttons = [...document.querySelectorAll('[data-sound]')];
 const volumeSlider = document.querySelector('#volume');
 const volumeValue = document.querySelector('#volume-value');
+const quickBarToggle = document.querySelector('#quick-bar-toggle');
+const quickBarSize = document.querySelector('#quick-bar-size');
 const clips = {
   applause: 'assets/sounds/applause.wav',
   cheer: 'assets/sounds/cheer.wav',
@@ -30,10 +32,37 @@ function setVolume(value) {
 }
 
 chrome.storage.local.get({ cueVolume: 100 }).then(({ cueVolume }) => setVolume(cueVolume));
+chrome.storage.local.get({ quickBarEnabled: false, quickBarSize: 'small' }).then(({ quickBarEnabled, quickBarSize: storedQuickBarSize }) => {
+  quickBarToggle.checked = quickBarEnabled;
+  quickBarSize.value = storedQuickBarSize;
+});
 
 volumeSlider.addEventListener('input', () => {
   const volume = setVolume(volumeSlider.value) * 100;
   chrome.storage.local.set({ cueVolume: volume });
+});
+
+async function updateQuickBar(settings) {
+  await chrome.storage.local.set(settings);
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!activeTab?.id || !/^https?:\/\//.test(activeTab.url || '')) return;
+
+  try {
+    await chrome.tabs.sendMessage(activeTab.id, { type: 'CLASSROOM_CUE_QUICK_BAR', ...settings });
+  } catch {
+    // Tabs open before installation do not have the content script yet.
+    await chrome.scripting.insertCSS({ target: { tabId: activeTab.id }, files: ['overlay.css'] });
+    await chrome.scripting.executeScript({ target: { tabId: activeTab.id }, files: ['overlay.js'] });
+    await chrome.tabs.sendMessage(activeTab.id, { type: 'CLASSROOM_CUE_QUICK_BAR', ...settings });
+  }
+}
+
+quickBarToggle.addEventListener('change', () => {
+  updateQuickBar({ quickBarEnabled: quickBarToggle.checked, quickBarSize: quickBarSize.value });
+});
+
+quickBarSize.addEventListener('change', () => {
+  updateQuickBar({ quickBarEnabled: quickBarToggle.checked, quickBarSize: quickBarSize.value });
 });
 
 async function playInActiveTab(sound, volume) {

@@ -23,6 +23,26 @@
         <input id="volume" type="range" min="0" max="100" value="100" step="1" aria-label="Cue volume" />
       </div>
 
+      <section class="quick-bar-settings" aria-labelledby="quick-bar-label">
+        <div class="quick-bar-heading">
+          <div>
+            <h2 id="quick-bar-label">On-screen quick bar</h2>
+            <p>Show compact cue buttons at the top of this page.</p>
+          </div>
+          <label class="switch" for="quick-bar-toggle">
+            <input id="quick-bar-toggle" type="checkbox" aria-label="Show on-screen quick bar" />
+            <span aria-hidden="true"></span>
+          </label>
+        </div>
+        <label class="size-picker" for="quick-bar-size">Button size
+          <select id="quick-bar-size">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </label>
+      </section>
+
       <section aria-labelledby="celebrate-label">
         <h2 id="celebrate-label">Celebrate</h2>
         <div class="sound-grid">

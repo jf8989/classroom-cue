@@ -13,6 +13,18 @@ h1 { margin: 0; font-size: 20px; line-height: 1.1; letter-spacing: -.04em; }
 .volume-control label { min-width: 82px; color: #4a5c7d; font-size: 10px; font-weight: 750; }
 .volume-control output { display: inline-block; min-width: 25px; color: #315df6; text-align: right; }
 .volume-control input { width: 100%; height: 14px; accent-color: #315df6; cursor: pointer; }
+.quick-bar-settings { margin: 0 0 17px; padding: 11px; border: 1px solid #e1e8fa; border-radius: 12px; background: #f8faff; }
+.quick-bar-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.quick-bar-heading h2 { margin: 0 0 3px; }
+.quick-bar-heading p { margin: 0; color: #66738d; font-size: 9px; line-height: 1.25; }
+.switch { position: relative; display: inline-flex; flex: 0 0 auto; cursor: pointer; }
+.switch input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.switch span { width: 34px; height: 20px; border-radius: 99px; background: #c7d2e9; transition: background .18s ease; }
+.switch span::after { content: ''; display: block; width: 14px; height: 14px; margin: 3px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(25, 44, 81, .25); transition: transform .18s ease; }
+.switch input:checked + span { background: #315df6; }.switch input:checked + span::after { transform: translateX(14px); }
+.switch input:focus-visible + span { outline: 3px solid #315df6; outline-offset: 2px; }
+.size-picker { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; color: #4a5c7d; font-size: 10px; font-weight: 750; }
+.size-picker select { min-width: 105px; padding: 5px 24px 5px 8px; border: 1px solid #cfdaf0; border-radius: 7px; background: #fff; color: #253b67; font: inherit; cursor: pointer; }
 section { margin: 0 0 16px; }
 h2 { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: .03em; color: #4a5c7d; }
 .sound-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }

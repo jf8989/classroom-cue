@@ -14,6 +14,14 @@
     "128": "icons/icon-128.png"
   },
   "permissions": ["activeTab", "scripting", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "css": ["overlay.css"],
+      "js": ["overlay.js"],
+      "run_at": "document_idle"
+    }
+  ],
   "web_accessible_resources": [
     {
       "resources": ["assets/sounds/*.wav"],
