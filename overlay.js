@@ -50,10 +50,10 @@
     if (quickBarEnabled === true || root()) render(quickBarSize || root()?.dataset.size || 'small');
   }
 
-  chrome.storage.local.get({ quickBarEnabled: false, quickBarSize: 'small', cueVolume: 100 }).then((settings) => {
-    cueVolume = settings.cueVolume;
-    apply(settings);
+  chrome.storage.local.get({ cueVolume: 100 }).then(({ cueVolume: storedVolume }) => {
+    cueVolume = storedVolume;
   });
+  chrome.runtime.sendMessage({ type: 'CLASSROOM_CUE_GET_QUICK_BAR' }).then(apply).catch(() => {});
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'local' && changes.cueVolume) cueVolume = changes.cueVolume.newValue;
   });

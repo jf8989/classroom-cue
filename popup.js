@@ -32,37 +32,49 @@ function setVolume(value) {
 }
 
 chrome.storage.local.get({ cueVolume: 100 }).then(({ cueVolume }) => setVolume(cueVolume));
-chrome.storage.local.get({ quickBarEnabled: false, quickBarSize: 'small' }).then(({ quickBarEnabled, quickBarSize: storedQuickBarSize }) => {
-  quickBarToggle.checked = quickBarEnabled;
-  quickBarSize.value = storedQuickBarSize;
-});
+async function getActiveWebsiteTab() {
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!activeTab?.id || !/^https?:\/\//.test(activeTab.url || '')) return null;
+  return activeTab;
+}
+
+async function loadQuickBarSettings() {
+  const activeTab = await getActiveWebsiteTab();
+  if (!activeTab) return;
+
+  const settings = await chrome.runtime.sendMessage({
+    type: 'CLASSROOM_CUE_GET_QUICK_BAR',
+    tabId: activeTab.id
+  });
+  quickBarToggle.checked = settings?.quickBarEnabled ?? false;
+  quickBarSize.value = settings?.quickBarSize ?? 'small';
+}
+
+loadQuickBarSettings();
 
 volumeSlider.addEventListener('input', () => {
   const volume = setVolume(volumeSlider.value) * 100;
   chrome.storage.local.set({ cueVolume: volume });
 });
 
-async function updateQuickBar(settings) {
-  await chrome.storage.local.set(settings);
-  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!activeTab?.id || !/^https?:\/\//.test(activeTab.url || '')) return;
+async function updateQuickBar() {
+  const activeTab = await getActiveWebsiteTab();
+  if (!activeTab) return;
 
-  try {
-    await chrome.tabs.sendMessage(activeTab.id, { type: 'CLASSROOM_CUE_QUICK_BAR', ...settings });
-  } catch {
-    // Tabs open before installation do not have the content script yet.
-    await chrome.scripting.insertCSS({ target: { tabId: activeTab.id }, files: ['overlay.css'] });
-    await chrome.scripting.executeScript({ target: { tabId: activeTab.id }, files: ['overlay.js'] });
-    await chrome.tabs.sendMessage(activeTab.id, { type: 'CLASSROOM_CUE_QUICK_BAR', ...settings });
-  }
+  await chrome.runtime.sendMessage({
+    type: 'CLASSROOM_CUE_SET_QUICK_BAR',
+    tabId: activeTab.id,
+    quickBarEnabled: quickBarToggle.checked,
+    quickBarSize: quickBarSize.value
+  });
 }
 
 quickBarToggle.addEventListener('change', () => {
-  updateQuickBar({ quickBarEnabled: quickBarToggle.checked, quickBarSize: quickBarSize.value });
+  updateQuickBar();
 });
 
 quickBarSize.addEventListener('change', () => {
-  updateQuickBar({ quickBarEnabled: quickBarToggle.checked, quickBarSize: quickBarSize.value });
+  updateQuickBar();
 });
 
 async function playInActiveTab(sound, volume) {
