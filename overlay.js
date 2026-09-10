@@ -45,7 +45,15 @@
     bar.addEventListener('pointerdown', (event) => {
       if (event.button !== 0 && event.pointerType !== 'touch') return;
       const rect = bar.getBoundingClientRect();
-      drag = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top, moved: false };
+      drag = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        left: rect.left,
+        top: rect.top,
+        button: event.target.closest?.('button'),
+        moved: false
+      };
       bar.setPointerCapture(event.pointerId);
     });
     bar.addEventListener('pointermove', (event) => {
@@ -63,13 +71,21 @@
     });
     bar.addEventListener('pointerup', (event) => {
       if (!drag || event.pointerId !== drag.pointerId) return;
-      if (drag.moved) bar.dataset.dragged = 'true';
+      if (drag.moved) {
+        bar.dataset.dragged = 'true';
+      } else if (drag.button?.dataset.sound) {
+        // Pointer capture retargets the ensuing click to the toolbar, so play
+        // the cue here while the user's input gesture is still active.
+        bar.dataset.suppressClick = 'true';
+        play(drag.button.dataset.sound);
+      }
       drag = undefined;
     });
     bar.addEventListener('lostpointercapture', () => { drag = undefined; });
     bar.addEventListener('click', (event) => {
-      if (bar.dataset.dragged !== 'true') return;
+      if (bar.dataset.dragged !== 'true' && bar.dataset.suppressClick !== 'true') return;
       delete bar.dataset.dragged;
+      delete bar.dataset.suppressClick;
       event.preventDefault();
       event.stopImmediatePropagation();
     }, true);
@@ -90,6 +106,7 @@
     cues.forEach(([sound, icon, label]) => {
       const button = document.createElement('button');
       button.type = 'button'; button.title = label; button.setAttribute('aria-label', label);
+      button.dataset.sound = sound;
       button.textContent = icon;
       button.addEventListener('click', () => play(sound));
       bar.append(button);
