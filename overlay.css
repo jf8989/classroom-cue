@@ -14,6 +14,9 @@
   background: rgba(24, 34, 59, .76);
   box-shadow: 0 4px 16px rgba(16, 26, 50, .2);
   transform: translateX(-50%);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
   -webkit-backdrop-filter: blur(9px);
   backdrop-filter: blur(9px);
   scrollbar-width: none;
@@ -35,6 +38,7 @@
   font-size: 15px;
   line-height: 1;
   cursor: pointer;
+  touch-action: none;
   transition: background .12s ease, transform .12s ease;
 }
 #classroom-cue-quick-bar button:hover { background: rgba(255, 255, 255, .22); }

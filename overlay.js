@@ -20,9 +20,60 @@
     ['drumroll', '🥁', 'Drumroll'], ['mystery', '🕵️', 'Mystery rise']
   ];
   let cueVolume = 100;
+  let quickBarPosition;
 
   function root() { return document.getElementById(ROOT_ID); }
   function remove() { root()?.remove(); }
+  function constrainPosition(left, top, bar) {
+    const maxLeft = Math.max(0, window.innerWidth - bar.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - bar.offsetHeight);
+    return {
+      left: Math.min(Math.max(0, left), maxLeft),
+      top: Math.min(Math.max(0, top), maxTop)
+    };
+  }
+  function positionBar(bar) {
+    if (!quickBarPosition) return;
+    const position = constrainPosition(quickBarPosition.left, quickBarPosition.top, bar);
+    bar.style.left = `${position.left}px`;
+    bar.style.top = `${position.top}px`;
+    bar.style.transform = 'none';
+  }
+  function makeDraggable(bar) {
+    let drag;
+
+    bar.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0 && event.pointerType !== 'touch') return;
+      const rect = bar.getBoundingClientRect();
+      drag = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top, moved: false };
+      bar.setPointerCapture(event.pointerId);
+    });
+    bar.addEventListener('pointermove', (event) => {
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      const dx = event.clientX - drag.startX;
+      const dy = event.clientY - drag.startY;
+      if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+      drag.moved = true;
+      const position = constrainPosition(drag.left + dx, drag.top + dy, bar);
+      quickBarPosition = position;
+      bar.style.left = `${position.left}px`;
+      bar.style.top = `${position.top}px`;
+      bar.style.transform = 'none';
+      event.preventDefault();
+    });
+    bar.addEventListener('pointerup', (event) => {
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      if (drag.moved) bar.dataset.dragged = 'true';
+      drag = undefined;
+    });
+    bar.addEventListener('lostpointercapture', () => { drag = undefined; });
+    bar.addEventListener('click', (event) => {
+      if (bar.dataset.dragged !== 'true') return;
+      delete bar.dataset.dragged;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+  }
   function play(sound) {
     const audio = new Audio(chrome.runtime.getURL(clips[sound]));
     audio.volume = Math.max(0, Math.min(1, Number(cueVolume) / 100));
@@ -44,6 +95,8 @@
       bar.append(button);
     });
     document.documentElement.append(bar);
+    positionBar(bar);
+    makeDraggable(bar);
   }
   function apply({ quickBarEnabled, quickBarSize }) {
     if (quickBarEnabled === false) return remove();
